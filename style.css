@@ -1,0 +1,97 @@
+/* =============================================
+   style.css — base page styles
+   Students: feel free to edit this file!
+   ============================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: monospace;
+  background: #111;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+
+/* --- Header / controls bar --- */
+header {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header h1 {
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa;
+  flex: 1;
+}
+
+select {
+  font-family: monospace;
+  font-size: 0.9rem;
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: 1px solid #aaa;
+}
+
+/* --- Sketch iframe container --- */
+#sketch-container {
+  width: 100%;
+  max-width: 860px;
+  aspect-ratio: 8 / 5;
+  border: 1px solid #333;
+  background: #000;
+  overflow: hidden;
+}
+
+#sketch-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* --- Metadata strip --- */
+#metadata {
+  width: 100%;
+  max-width: 860px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  font-size: 0.8rem;
+  color: #888;
+  border-top: 1px solid #222;
+  padding-top: 1rem;
+}
+
+#metadata .label {
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#metadata a {
+  color: #888;
+}
+
+#metadata a:hover {
+  color: #eee;
+}

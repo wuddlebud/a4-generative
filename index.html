@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>a4-remix</title>
+    <link rel="stylesheet" href="style.css">
+    
+  </head>
+  <body>
+
+    <header>
+      <h1>a4-remix</h1>
+      <select id="sketch-select">
+        <option value="remix">remix</option>
+        <option value="sketch1">sketch 1</option>
+        <option value="sketch2">sketch 2</option>
+      </select>
+    </header>
+
+    <!-- The iframe is where the active sketch lives -->
+    <div id="sketch-container">
+      <iframe id="sketch-frame" src=""></iframe>
+    </div>
+
+    <!-- Metadata about the currently displayed sketch -->
+    <div id="metadata">
+      <span class="label">title</span>
+      <span id="meta-title">—</span>
+
+      <span class="label">author</span>
+      <span id="meta-author">—</span>
+
+      <span class="label">year</span>
+      <span id="meta-date">—</span>
+
+      <span class="label">source</span>
+      <span id="meta-source">—</span>
+    </div>
+
+    <script src="script.js"></script>
+
+  </body>
+</html>
