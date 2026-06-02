@@ -10,6 +10,7 @@ function setup() {
 // Array of path objects, each containing an array of particles
 let paths = [];
 
+//okay so its a paricle thing, not a circle thing. I gotta see if i can change the shape of a particle in p5
 // How long until the next particle
 let framesBetweenParticles = 5;
 let nextParticleFrame = 0;
@@ -161,11 +162,19 @@ class Particle {
     let opacity = this.framesRemaining / particleFadeFrames;
     noStroke();
     fill(this.hue, 80, 90, opacity);
-    circle(this.position.x, this.position.y, 24);
+   star(0, 0, 30, 70, 5); //i dont think this will work yet i need the function, but im checking
+}
+    //circle(this.position.x, this.position.y, 24);
+
+
+
+
+
+    //heres where the particle is drawn. hopefully i can jst change it from circle to the math for a star. math star
   }
 }
 
-
+//kayy so i wanna first change the shape into a star. there isnt a set shape for that in p5, but you can make a star usig triganomatry. i hate math 
  
 
 
