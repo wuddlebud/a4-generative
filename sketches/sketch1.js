@@ -75,5 +75,5 @@ class Snowflake {
     ellipse(this.posX, this.posY, this.size);
   }
 }
-
 }
+
