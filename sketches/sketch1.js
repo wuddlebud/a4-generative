@@ -7,10 +7,7 @@ function setup() {
   createCanvas(800, 500);
 }
 
-// function draw() {
-//   background(220);
-  // your code here
-  /* 
+/* 
  
    Structure 3 (work in progress) 
    
@@ -55,27 +52,32 @@ function draw() {
   for (var i = 0; i < circles.length; i++) {
     circles[i].update();
   }
-  for (var j = 0; j < circles.length; j++) {
-    circles[j].move();
+  for (var i = 0; i < circles.length; i++) {
+    circles[i].show();
   }
-}
-
-function Circle(px, py, pr, psp, pysp, pid) {
+  for (var j = 0; j < circles.length; j++) {
+    circles[j].update();
+  }
   this.x = px;
   this.y = py;
   this.r = pr;
-  this.r2 = this.r * this.r;
+  Object.defineProperty(this, 'r2', {
+    get: function() { return this.r * this.r; }
+  });
   this.sp = psp;
   this.ysp = pysp;
-  this.id = pid;
-
   this.update = function() {
+    for (var i = this.id + 1; i < circles.length; i++) {
+      intersect(circles[this.id], circles[i]);
+    }
+  }
+  this.show = function() {
     for (var i = this.id + 1; i < numCircle; i++) {
       intersect(circles[this.id], circles[i]);
     }
   }
 
-  this.move = function() {
+  this.update = function() {
     this.x += this.sp;
     this.y += this.ysp;
     if (this.sp > 0) {
@@ -96,8 +98,7 @@ function Circle(px, py, pr, psp, pysp, pid) {
         this.y = height + this.r;
       }
     }
-  }
-}
+const INTERSECTION_ALPHA = 204;
 
 function intersect(cA, cB) {
 
@@ -120,8 +121,7 @@ function intersect(cA, cB) {
   var pbX = x2 - h * (cB.y - cA.y) / d;
   var pbY = y2 + h * (cB.x - cA.x) / d;
 
-  stroke(0, 204);
+  stroke(0, INTERSECTION_ALPHA);
   line(paX, paY, pbX, pbY);
 
-}
-}
+} }
