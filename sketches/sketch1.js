@@ -3,125 +3,170 @@
 // Paste your source sketch code here and start hacking
 // =============================================
 
+//new plan, im gonna make a constilation thingy. my spelling so rank but i cant think and code
 function setup() {
   createCanvas(800, 500);
 }
+// Array of path objects, each containing an array of particles
+let paths = [];
 
-/* 
- 
-   Structure 3 (work in progress) 
-   
-   A surface filled with one hundred medium to small sized circles. 
-   Each circle has a different size and direction, but moves at the same slow rate. 
-   Display: 
-   A. The instantaneous intersections of the circles 
-   B. The aggregate intersections of the circles 
- 
-   Ported to p5.js by Casey Reas
-   11 July 2016
-   p5.js 0.5.2
-  
-   Restored by Casey Reas <http://reas.com> 
-   22 June 2016 
-   Processing v.3.1.1 <http://processing.org> 
-  
-   Implemented by Casey Reas
-   Uses circle intersection code from William Ngan <http://metaphorical.net> 
-   Processing v.68 <http://processing.org> 
- 
-*/
+// How long until the next particle
+let framesBetweenParticles = 5;
+let nextParticleFrame = 0;
 
-var numCircle = 100;
-var circles = [];
+// Location of last created particle
+let previousParticlePosition;
+
+// How long it takes for a particle to fade out
+let particleFadeFrames = 300;
 
 function setup() {
-  createCanvas(640, 480);
-  frameRate(30);
-  for (var i = 0; i < numCircle; i++) {
-    var x = random(width);
-    var y = random(height);
-    var r = random(20, 60);
-    var xspeed = random(-1.25, 1.25);
-    var yspeed = random(-1.25, 1.25);
-    circles[i] = new Circle(x, y, r, xspeed, yspeed, i);
-  }
+  createCanvas(720, 400);
+  colorMode(HSB);
+
+  // Start with a default vector and then use this to save the position
+  // of the last created particle
+  previousParticlePosition = createVector();
+  describe(
+    'When the cursor drags along the black background, it draws a pattern of multicolored circles outlined in white and connected by white lines. The circles and lines fade out over time.'
+  );
 }
 
 function draw() {
-  background(255);
-  for (var i = 0; i < circles.length; i++) {
-    circles[i].update();
+  background(0);
+
+  // Update and draw all paths
+  for (let path of paths) {
+    path.update();
+    path.display();
   }
-  for (var i = 0; i < circles.length; i++) {
-    circles[i].show();
+}
+
+// Create a new path when mouse is pressed
+function mousePressed() {
+  nextParticleFrame = frameCount;
+  paths.push(new Path());
+
+  // Reset previous particle position to mouse
+  // so that first particle in path has zero velocity
+  previousParticlePosition.set(mouseX, mouseY);
+  createParticle();
+}
+
+// Add particles when mouse is dragged
+function mouseDragged() {
+  // If it's time for a new point
+  if (frameCount >= nextParticleFrame) {
+    createParticle();
   }
-  for (var j = 0; j < circles.length; j++) {
-    circles[j].update();
+}
+
+function createParticle() {
+  // Grab mouse position
+  let mousePosition = createVector(mouseX, mouseY);
+
+  // New particle's velocity is based on mouse movement
+  let velocity = p5.Vector.sub(mousePosition, previousParticlePosition);
+  velocity.mult(0.05);
+
+  // Add new particle
+  let lastPath = paths[paths.length - 1];
+  lastPath.addParticle(mousePosition, velocity);
+
+  // Schedule next particle
+  nextParticleFrame = frameCount + framesBetweenParticles;
+
+  // Store mouse values
+  previousParticlePosition.set(mouseX, mouseY);
+}
+
+// Path is a list of particles
+class Path {
+  constructor() {
+    this.particles = [];
   }
-  this.x = px;
-  this.y = py;
-  this.r = pr;
-  Object.defineProperty(this, 'r2', {
-    get: function() { return this.r * this.r; }
-  });
-  this.sp = psp;
-  this.ysp = pysp;
-  this.update = function() {
-    for (var i = this.id + 1; i < circles.length; i++) {
-      intersect(circles[this.id], circles[i]);
+
+  addParticle(position, velocity) {
+    // Add a new particle with a position, velocity, and hue
+    let particleHue = (this.particles.length * 30) % 360;
+    this.particles.push(new Particle(position, velocity, particleHue));
+  }
+
+  // Update all particles
+  update() {
+    for (let particle of this.particles) {
+      particle.update();
     }
   }
-  this.show = function() {
-    for (var i = this.id + 1; i < numCircle; i++) {
-      intersect(circles[this.id], circles[i]);
-    }
+
+  // Draw a line between two particles
+  connectParticles(particleA, particleB) {
+    let opacity = particleA.framesRemaining / particleFadeFrames;
+    stroke(255, opacity);
+    line(
+      particleA.position.x,
+      particleA.position.y,
+      particleB.position.x,
+      particleB.position.y
+    );
   }
 
-  this.update = function() {
-    this.x += this.sp;
-    this.y += this.ysp;
-    if (this.sp > 0) {
-      if (this.x > width + this.r) {
-        this.x = -this.r;
-      }
-    } else {
-      if (this.x < -this.r) {
-        this.x = width + this.r;
+  // Display path
+  display() {
+    // Loop through backwards so that when a particle is removed,
+    // the index number for the next loop will match up with the
+    // particle before the removed one
+    for (let i = this.particles.length - 1; i >= 0; i -= 1) {
+      // Remove this particle if it has no frames remaining
+      if (this.particles[i].framesRemaining <= 0) {
+        this.particles.splice(i, 1);
+
+        // Otherwise, display it
+      } else {
+        this.particles[i].display();
+
+        // If there is a particle after this one
+        if (i < this.particles.length - 1) {
+          // Connect them with a line
+          this.connectParticles(this.particles[i], this.particles[i + 1]);
+        }
       }
     }
-    if (this.ysp > 0) {
-      if (this.y > height + this.r) {
-        this.y = -this.r;
-      }
-    } else {
-      if (this.y < -this.r) {
-        this.y = height + this.r;
-      }
-    }
-const INTERSECTION_ALPHA = 204;
+  }
+}
 
-function intersect(cA, cB) {
-
-  var dx = cA.x - cB.x;
-  var dy = cA.y - cB.y;
-  var d2 = dx * dx + dy * dy;
-  var d = sqrt(d2);
-
-  if ((d > cA.r + cB.r) || (d < abs(cA.r - cB.r))) {
-    return; // no solution 
+// Particle along a path
+class Particle {
+  constructor(position, velocity, hue) {
+    this.position = position.copy();
+    this.velocity = velocity.copy();
+    this.hue = hue;
+    this.drag = 0.95;
+    this.framesRemaining = particleFadeFrames;
   }
 
-  var a = (cA.r2 - cB.r2 + d2) / (2 * d);
-  var h = sqrt(cA.r2 - a * a);
-  var x2 = cA.x + a * (cB.x - cA.x) / d;
-  var y2 = cA.y + a * (cB.y - cA.y) / d;
+  update() {
+    // Move it
+    this.position.add(this.velocity);
 
-  var paX = x2 + h * (cB.y - cA.y) / d;
-  var paY = y2 - h * (cB.x - cA.x) / d;
-  var pbX = x2 - h * (cB.y - cA.y) / d;
-  var pbY = y2 + h * (cB.x - cA.x) / d;
+    // Slow it down
+    this.velocity.mult(this.drag);
 
-  stroke(0, INTERSECTION_ALPHA);
-  line(paX, paY, pbX, pbY);
+    // Fade it out
+    this.framesRemaining = this.framesRemaining - 1;
+  }
 
-} }
+  // Draw particle
+  display() {
+    let opacity = this.framesRemaining / particleFadeFrames;
+    noStroke();
+    fill(this.hue, 80, 90, opacity);
+    circle(this.position.x, this.position.y, 24);
+  }
+}
+
+
+ 
+
+
+// ugghhh all these tings are old an unorginized, I do not want to deal. BYE
