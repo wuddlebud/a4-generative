@@ -3,25 +3,113 @@
 // // Paste your source sketch code here and start hacking
 // // =============================================
 
-
 // Define array to hold snowflake objects
 let snowflakes = [];
+let colorChoice
+let dir = 1;
+
+
+     
+
+    
+
+// make an array named colorSet1
+let colorSet1 = [
+  [164, 245, 66], [245, 66, 167], [57, 162, 237]
+]
+
+let colorSet2 = [
+  [255,0,255]
+]
+
+let colorSet3 =[
+  [100,232,98]
+]
+
+let colorSet4 =[
+  [20,30,23]
+]
+
+let colorSet5 =[
+  [1,55,96]
+]
+
+let colorSet6 =[
+  [44,56,33]
+]
+
+let colorSet7 =[
+  [200,76,93]
+]
+
+let colorSet8 =[
+  [44,88,99]
+]
+
+let colorSet9 =[
+  [110,24,222]
+]
+
+let colorSet10 =[
+  [22,99,54]
+]
+// let colorSet3 = [ random(20, 256), random(200, 25), random(200, 256) ]
+
+//reset the cubes
+function keyPressed() {
+
+  if (keyCode === LEFT_ARROW) {
+    if(dir == 1){
+       dir = -1;
+    }else{
+       dir = 1;
+    }
+  }
+  // Uncomment to prevent any default behavior.
+  // return false;
+}
+// make an array to contains the colorsets
+let colorSets = [colorSet1, colorSet2,colorSet3,colorSet4,colorSet5,colorSet6,colorSet7,colorSet8,colorSet9,colorSet10]
+// function to wipe the snowflakes and create new ones
+function makeItSnow(){
+   let colorNumber = Math.floor(Math.random() * (colorSets.length))
+   colorChoice = colorSets[colorNumber]
+   console.log(colorChoice)
+   // first, clear the snow array
+  snowflakes.length = 0
+    // Create snowflake objects
+  for (let i = 0; i < 300; i++) {
+    // Add a new snowflake object to the array
+    snowflakes.push(new Snowflake());
+  }
+}
+
+
+
+
 
 function setup() {
   createCanvas(400, 600);
 
   angleMode(DEGREES);
 
-  // Create snowflake objects
-  for (let i = 0; i < 300; i++) {
-    // Add a new snowflake object to the array
-    snowflakes.push(new Snowflake());
-  }
+ makeItSnow()
 
 }
 
+  function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    console.log("Left arrow key was pressed!");
+    makeItSnow()
+  } else if (key === 'a' || key === 'A') {
+    console.log("The 'A' key was pressed!");
+    makeItSnow()
+  }}
+
 function draw() {
   background(0);
+  
+
 
   // Update and display each snowflake in the array
   let currentTime = frameCount / 60;
@@ -42,7 +130,7 @@ class Snowflake {
     this.initialAngle = random(0, 360);
     this.size = random(6, 30);
     this.radius = sqrt(random(pow(width / 2, 2)));
-    this.color = color(random(20, 256), random(200, 25), random(200, 256));
+    this.color = color(colorChoice[0], colorChoice[1], colorChoice[2] );
   }
 
   update(time) {
@@ -57,12 +145,16 @@ class Snowflake {
 
     // Different size snowflakes fall at different y speeds
     let ySpeed = 10 / this.size;
-    this.posY += ySpeed;
+
+    this.posY += ySpeed * dir;
+    
 
     // When snowflake reaches the bottom, move it to the top
     if (this.posY > height) {
       this.posY = -50;
     }
+    
+   
   }
 
   display() {
@@ -72,11 +164,96 @@ class Snowflake {
   //  rect(30, 20, 55, 55);
     //ellipse(this.posX, this.posY, this.size);
     
-  }
+    
+//     isKeyPressed= 'myFunction()'
+  
+//     function myFunction() {
+//   document.getElementById("Snowflke").hide()
+}
+    
+  
+  
+// document.getElementById("Snowflake").onkeypress = function() {myFunction()};
+// function myFunction() {
+//   onkeydown document.getElementById("Snowflake").style.backgroundColor = "red";
+// }
+}
+
+
+
+// // Define array to hold snowflake objects
+// let snowflakes = [];
+
+// function setup() {
+//   createCanvas(400, 600);
+
+//   angleMode(DEGREES);
+
+//   // Create snowflake objects
+//   for (let i = 0; i < 300; i++) {
+//     // Add a new snowflake object to the array
+//     snowflakes.push(new Snowflake());
+//   }
+
+// }
+
+// function draw() {
+//   background(0);
+
+//   // Update and display each snowflake in the array
+//   let currentTime = frameCount / 60;
+
+//   for (let flake of snowflakes) {
+//     // Update each snowflake position and display
+//     flake.update(currentTime);
+//     flake.display();
+//   }
+// }
+
+// // Define the snowflake class
+
+// class Snowflake {
+//   constructor() {
+//     this.posX = 0;
+//     this.posY = random(-height, 0);
+//     this.initialAngle = random(0, 360);
+//     this.size = random(6, 30);
+//     this.radius = sqrt(random(pow(width / 2, 2)));
+//     this.color = color(random(20, 256), random(200, 25), random(200, 256));
+//   }
+
+//   update(time) {
+//     // Define angular speed (degrees / second)
+//     let angularSpeed = 25;
+
+//     // Calculate the current angle
+//     let angle = this.initialAngle + angularSpeed * time;
+
+//     // x position follows a sine wave
+//     this.posX = width / 2 + this.radius * sin(angle);
+
+//     // Different size snowflakes fall at different y speeds
+//     let ySpeed = 10 / this.size;
+//     this.posY += ySpeed;
+
+//     // When snowflake reaches the bottom, move it to the top
+//     if (this.posY > height) {
+//       this.posY = -50;
+//     }
+//   }
+
+//   display() {
+//     fill(this.color);
+//     noStroke();
+//   rect(this.posX, this.posY, this.size);
+//   //  rect(30, 20, 55, 55);
+//     //ellipse(this.posX, this.posY, this.size);
+    
+//   }
   
 
   
-}
+// }
 
 
 
