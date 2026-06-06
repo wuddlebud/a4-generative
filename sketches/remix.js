@@ -33,17 +33,16 @@ let particleFadeFrames = 300;
   describe(
     'When the cursor drags along the black background, it draws a pattern of multicolored circles outlined in white and connected by white lines. The circles and lines fade out over time.'
   );
-}
 
-function draw() {
-  background(0);
+
+
 
   // Update and draw all paths
   for (let path of paths) {
     path.update();
     path.display();
   }
-}
+
 
 
   
@@ -301,8 +300,10 @@ function makeItSnow(){
     makeItSnow()
   }}
 
-function draw() {
-  background(0);
+
+  
+
+
   
 
 
