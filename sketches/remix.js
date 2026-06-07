@@ -1,204 +1,12 @@
-// =============================================
-// remix.js — your combined sketch
-// This is where sketch1 and sketch2 come together
-// into something new
-// =============================================
-
-function setup() {
-  createCanvas(800, 500);
-}
-
-function draw() {
-  background(220);
-  // your combined code here
-}
-// Array of path objects, each containing an array of particles
-let paths = [];
-
-// How long until the next particle
-let framesBetweenParticles = 5;
-let nextParticleFrame = 0;
-
-// Location of last created particle
-let previousParticlePosition;
-
-// How long it takes for a particle to fade out
-let particleFadeFrames = 300;
+// // =============================================
+// // remix.js — your combined sketch
+// // This is where sketch1 and sketch2 come together
+// // into something new
+// // =============================================
 
 
 
-  // Start with a default vector and then use this to save the position
-  // of the last created particle
-  previousParticlePosition = createVector();
-  describe(
-    'When the cursor drags along the black background, it draws a pattern of multicolored circles outlined in white and connected by white lines. The circles and lines fade out over time.'
-  );
-
-
-
-
-  // Update and draw all paths
-  for (let path of paths) {
-    path.update();
-    path.display();
-  }
-
-
-
-  
-
-function star(x, y, radius1, radius2, npoints) {
-  let angle = TWO_PI / npoints;
-  let halfAngle = angle / 2.0;
-  beginShape();
-  for (let a = 0; a < TWO_PI; a += angle) {
-
-    let sx = x + cos(a) * radius2;
-    let sy = y + sin(a) * radius2;
-    vertex(sx, sy);
-    sx = x + cos(a + halfAngle) * radius1;
-    sy = y + sin(a + halfAngle) * radius1;
-    vertex(sx, sy);
-  }
-  endShape(CLOSE);
-}
-// Create a new path when mouse is pressed
-function mousePressed() {
-  nextParticleFrame = frameCount;
-  paths.push(new Path());
-
-  // Reset previous particle position to mouse
-  // so that first particle in path has zero velocity
-  previousParticlePosition.set(mouseX, mouseY);
-  createParticle();
-}
-
-// Add particles when mouse is dragged
-function mouseDragged() {
-  // If it's time for a new point
-  if (frameCount >= nextParticleFrame) {
-    createParticle();
-  }
-}
-
-function createParticle() {
-  // Grab mouse position
-  let mousePosition = createVector(mouseX, mouseY);
-
-  // New particle's velocity is based on mouse movement
-  let velocity = p5.Vector.sub(mousePosition, previousParticlePosition);
-  velocity.mult(0.05);
-
-  // Add new particle
-  let lastPath = paths[paths.length - 1];
-  lastPath.addParticle(mousePosition, velocity);
-
-  // Schedule next particle
-  nextParticleFrame = frameCount + framesBetweenParticles;
-
-  // Store mouse values
-  previousParticlePosition.set(mouseX, mouseY);
-}
-
-// Path is a list of particles
-class Path {
-  constructor() {
-    this.particles = [];
-  }
-
-  addParticle(position, velocity) {
-    // Add a new particle with a position, velocity, and hue
-    let particleHue = 0 //(this.particles.length * 30) % 360;
-    this.particles.push(new Particle(position, velocity, particleHue));
-  }
-
-  // Update all particles
-  update() {
-    for (let particle of this.particles) {
-      particle.update();
-    }
-  }
-
-  // Draw a line between two particles
-  connectParticles(particleA, particleB) {
-    let opacity = particleA.framesRemaining / particleFadeFrames;
-    stroke(255, opacity);
-    line(
-      particleA.position.x,
-      particleA.position.y,
-      particleB.position.x,
-      particleB.position.y
-    );
-  }
-
-  // Display path
-  display() {
-    // Loop through backwards so that when a particle is removed,
-    // the index number for the next loop will match up with the
-    // particle before the removed one
-    for (let i = this.particles.length - 1; i >= 0; i -= 1) {
-      // Remove this particle if it has no frames remaining
-      if (this.particles[i].framesRemaining <= 0) {
-        this.particles.splice(i, 1);
-
-        // Otherwise, display it
-      } else {
-        this.particles[i].display();
-
-        // If there is a particle after this one
-        if (i < this.particles.length - 1) {
-          // Connect them with a line
-          this.connectParticles(this.particles[i], this.particles[i + 1]);
-        }
-      }
-    }
-  }
-
-
-// // Particle along a path
-// class Particle {
-//   constructor(position, velocity, hue) {
-//     this.position = position.copy();
-//     this.velocity = velocity.copy();
-//     this.hue = hue;
-//     this.drag = 0.95;
-//     this.framesRemaining = particleFadeFrames;
-//   }
-
-  update() {
-    // Move it
-    this.position.add(this.velocity);
-
-    // this moves the stars down
-    // this.position.y += 2.5
-    this.position.x += random(-0.5, 0.5)
-    this.position.y += random(-0.5, 0.5) 
-
-
-    // Slow it down
-    this.velocity.mult(this.drag * 0.5);
-
-    // this is responsible for fading stars and removing them from the sketch
-    this.framesRemaining = this.framesRemaining - 1;
-  }
-
-  // Draw particle
-  display() {
-    // uncomment the next line if you want stars to fade out
-    // let opacity = this.framesRemaining / particleFadeFrames;
-    
-    // comment out this line if you want stars to fade out
-    let opacity = 1; 
-
-    noStroke();
-    fill(this.hue, 0, 90, opacity);
-            let size = random(1, 5);
-    //twinkle stars 
-    //thank you rowan/ the surgeon for ur help :3
-
-    star(this.position.x, this.position.y, size, 10, 5);
-    // star(x, y, 50, 100, 5);
-  }
+// Define array to hold snowflake objects
 let snowflakes = [];
 let colorChoice
 let dir = 1;
@@ -283,76 +91,596 @@ function makeItSnow(){
 
 
 
+function setup() {
+  createCanvas(400, 600);
 
-
+  angleMode(DEGREES);
 
  makeItSnow()
 
-
-
-  function keyPressed() {
-  if (keyCode === LEFT_ARROW) {
-    console.log("Left arrow key was pressed!");
-    makeItSnow()
-  } else if (key === 'a' || key === 'A') {
-    console.log("The 'A' key was pressed!");
-    makeItSnow()
-  }
-
-
-  
-
-
-  
-
-
-  // Update and display each snowflake in the array
-  let currentTime = frameCount / 60;
-
-  for (let flake of snowflakes) {
-    // Update each snowflake position and display
-    flake.update(currentTime);
-    flake.display();
-  }
 }
 
-// Define the snowflake class
 
-class Snowflake {
-  constructor() {
-    this.posX = 0;
-    this.posY = random(-height, 0);
-    this.initialAngle = random(0, 360);
-    this.size = random(6, 30);
-    this.radius = sqrt(random(pow(width / 2, 2)));
-    this.color = color(colorChoice[0], colorChoice[1], colorChoice[2] );
-  }
 
-  update(time) {
-    // Define angular speed (degrees / second)
-    let angularSpeed = 25;
 
-    // Calculate the current angle
-    let angle = this.initialAngle + angularSpeed * time;
 
-    // x position follows a sine wave
-    this.posX = width / 2 + this.radius * sin(angle);
 
-    // Different size snowflakes fall at different y speeds
-    let ySpeed = 10 / this.size;
 
-    this.posY += ySpeed * dir;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function setup() {
+//   createCanvas(800, 500);
+// }
+
+// function draw() {
+//   background(220);
+  
+//   // Update and draw all paths
+//   for (let path of paths) {
+//     path.update();
+//     path.display();
+//   }
+
+//   // Update and display each snowflake
+//   let currentTime = frameCount / 60;
+//   for (let flake of snowflakes) {
+//     flake.update(currentTime);
+//     flake.display();
+//   }
+// }
+
+// // ===== PATH & PARTICLE SYSTEM =====
+// let paths = [];
+// let framesBetweenParticles = 5;
+// let nextParticleFrame = 0;
+// let previousParticlePosition;
+// let particleFadeFrames = 300;
+
+// function star(x, y, radius1, radius2, npoints) {
+//   let angle = TWO_PI / npoints;
+//   let halfAngle = angle / 2.0;
+//   beginShape();
+//   for (let a = 0; a < TWO_PI; a += angle) {
+//     let sx = x + cos(a) * radius2;
+//     let sy = y + sin(a) * radius2;
+//     vertex(sx, sy);
+//     sx = x + cos(a + halfAngle) * radius1;
+//     sy = y + sin(a + halfAngle) * radius1;
+//     vertex(sx, sy);
+//   }
+//   endShape(CLOSE);
+// }
+
+// function mousePressed() {
+//   nextParticleFrame = frameCount;
+//   paths.push(new Path());
+//   previousParticlePosition.set(mouseX, mouseY);
+//   createParticle();
+// }
+
+// function mouseDragged() {
+//   if (frameCount >= nextParticleFrame) {
+//     createParticle();
+//   }
+// }
+
+// function createParticle() {
+//   let mousePosition = createVector(mouseX, mouseY);
+//   let velocity = p5.Vector.sub(mousePosition, previousParticlePosition);
+//   velocity.mult(0.05);
+  
+//   let lastPath = paths[paths.length - 1];
+//   lastPath.addParticle(mousePosition, velocity);
+  
+//   nextParticleFrame = frameCount + framesBetweenParticles;
+//   previousParticlePosition.set(mouseX, mouseY);
+// }
+
+// class Path {
+//   constructor() {
+//     this.particles = [];
+//   }
+
+//   addParticle(position, velocity) {
+//     let particleHue = 0;
+//     this.particles.push(new Particle(position, velocity, particleHue));
+//   }
+
+//   update() {
+//     for (let particle of this.particles) {
+//       particle.update();
+//     }
+//   }
+
+//   connectParticles(particleA, particleB) {
+//     let opacity = particleA.framesRemaining / particleFadeFrames;
+//     stroke(255, opacity);
+//     line(particleA.position.x, particleA.position.y, particleB.position.x, particleB.position.y);
+//   }
+
+//   display() {
+//     for (let i = this.particles.length - 1; i >= 0; i -= 1) {
+//       if (this.particles[i].framesRemaining <= 0) {
+//         this.particles.splice(i, 1);
+//       } else {
+//         this.particles[i].display();
+//         if (i < this.particles.length - 1) {
+//           this.connectParticles(this.particles[i], this.particles[i + 1]);
+//         }
+//       }
+//     }
+//   }
+// } // ← CLOSE THE CLASS HERE
+
+// class Particle {
+//   constructor(position, velocity, hue) {
+//     this.position = position.copy();
+//     this.velocity = velocity.copy();
+//     this.hue = hue;
+//     this.drag = 0.95;
+//     this.framesRemaining = particleFadeFrames;
+//   }
+
+//   update() {
+//     this.position.add(this.velocity);
+//     this.position.x += random(-0.5, 0.5);
+//     this.position.y += random(-0.5, 0.5);
+//     this.velocity.mult(this.drag * 0.5);
+//     this.framesRemaining = this.framesRemaining - 1;
+//   }
+
+//   display() {
+//     let opacity = 1;
+//     noStroke();
+//     fill(this.hue, 0, 90, opacity);
+//     let size = random(1, 5);
+//     star(this.position.x, this.position.y, size, 10, 5);
+//   }
+// }
+
+// // ===== SNOWFLAKE SYSTEM =====
+// let snowflakes = [];
+// let colorChoice;
+// let dir = 1;
+
+// let colorSet1 = [[164, 245, 66], [245, 66, 167], [57, 162, 237]];
+// let colorSet2 = [[255, 0, 255]];
+// let colorSet3 = [[100, 232, 98]];
+// let colorSet4 = [[20, 30, 23]];
+// let colorSet5 = [[1, 55, 96]];
+// let colorSet6 = [[44, 56, 33]];
+// let colorSet7 = [[200, 76, 93]];
+// let colorSet8 = [[44, 88, 99]];
+// let colorSet9 = [[110, 24, 222]];
+// let colorSet10 = [[22, 99, 54]];
+
+// let colorSets = [colorSet1, colorSet2, colorSet3, colorSet4, colorSet5, colorSet6, colorSet7, colorSet8, colorSet9, colorSet10];
+
+// function makeItSnow() {
+//   let colorNumber = Math.floor(Math.random() * colorSets.length);
+//   colorChoice = colorSets[colorNumber];
+//   console.log(colorChoice);
+//   snowflakes.length = 0;
+//   for (let i = 0; i < 300; i++) {
+//     snowflakes.push(new Snowflake());
+//   }
+// }
+
+// function keyPressed() {
+//   if (keyCode === LEFT_ARROW) {
+//     dir = (dir === 1) ? -1 : 1;
+//   } else if (key === 'a' || key === 'A') {
+//     makeItSnow();
+//   }
+// }
+
+// class Snowflake {
+//   constructor() {
+//     this.posX = 0;
+//     this.posY = random(-height, 0);
+//     this.initialAngle = random(0, 360);
+//     this.size = random(6, 30);
+//     this.radius = sqrt(random(pow(width / 2, 2)));
+//     this.color = color(colorChoice[0], colorChoice[1], colorChoice[2]);
+//   }
+
+//   update(time) {
+//     let angularSpeed = 25;
+//     let angle = this.initialAngle + angularSpeed * time;
+//     this.posX = width / 2 + this.radius * sin(angle);
+//     let ySpeed = 10 / this.size;
+//     this.posY += ySpeed * dir;
+//     if (this.posY > height) {
+//       this.posY = -50;
+//     }
+//   }
+
+//   display() {
+//     fill(this.color);
+//     noStroke();
+//     rect(this.posX, this.posY, this.size);
+//   }
+// }
+
+// previousParticlePosition = createVector();
+// makeItSnow();
+
+
+// function setup() {
+//   createCanvas(800, 500);
+// }
+
+// function draw() {
+//   background(220);
+//   // your combined code here
+// }
+// // Array of path objects, each containing an array of particles
+// let paths = [];
+
+// // How long until the next particle
+// let framesBetweenParticles = 5;
+// let nextParticleFrame = 0;
+
+// // Location of last created particle
+// let previousParticlePosition;
+
+// // How long it takes for a particle to fade out
+// let particleFadeFrames = 300;
+
+
+
+//   // Start with a default vector and then use this to save the position
+//   // of the last created particle
+//   previousParticlePosition = createVector();
+//   describe(
+//     'When the cursor drags along the black background, it draws a pattern of multicolored circles outlined in white and connected by white lines. The circles and lines fade out over time.'
+//   );
+
+
+
+
+//   // Update and draw all paths
+//   for (let path of paths) {
+//     path.update();
+//     path.display();
+//   }
+
+
+
+  
+
+// function star(x, y, radius1, radius2, npoints) {
+//   let angle = TWO_PI / npoints;
+//   let halfAngle = angle / 2.0;
+//   beginShape();
+//   for (let a = 0; a < TWO_PI; a += angle) {
+
+//     let sx = x + cos(a) * radius2;
+//     let sy = y + sin(a) * radius2;
+//     vertex(sx, sy);
+//     sx = x + cos(a + halfAngle) * radius1;
+//     sy = y + sin(a + halfAngle) * radius1;
+//     vertex(sx, sy);
+//   }
+//   endShape(CLOSE);
+// }
+// // Create a new path when mouse is pressed
+// function mousePressed() {
+//   nextParticleFrame = frameCount;
+//   paths.push(new Path());
+
+//   // Reset previous particle position to mouse
+//   // so that first particle in path has zero velocity
+//   previousParticlePosition.set(mouseX, mouseY);
+//   createParticle();
+// }
+
+// // Add particles when mouse is dragged
+// function mouseDragged() {
+//   // If it's time for a new point
+//   if (frameCount >= nextParticleFrame) {
+//     createParticle();
+//   }
+// }
+
+// function createParticle() {
+//   // Grab mouse position
+//   let mousePosition = createVector(mouseX, mouseY);
+
+//   // New particle's velocity is based on mouse movement
+//   let velocity = p5.Vector.sub(mousePosition, previousParticlePosition);
+//   velocity.mult(0.05);
+
+//   // Add new particle
+//   let lastPath = paths[paths.length - 1];
+//   lastPath.addParticle(mousePosition, velocity);
+
+//   // Schedule next particle
+//   nextParticleFrame = frameCount + framesBetweenParticles;
+
+//   // Store mouse values
+//   previousParticlePosition.set(mouseX, mouseY);
+// }
+
+// // Path is a list of particles
+// class Path {
+//   constructor() {
+//     this.particles = [];
+//   }
+
+//   addParticle(position, velocity) {
+//     // Add a new particle with a position, velocity, and hue
+//     let particleHue = 0 //(this.particles.length * 30) % 360;
+//     this.particles.push(new Particle(position, velocity, particleHue));
+//   }
+
+//   // Update all particles
+//   update() {
+//     for (let particle of this.particles) {
+//       particle.update();
+//     }
+//   }
+
+//   // Draw a line between two particles
+//   connectParticles(particleA, particleB) {
+//     let opacity = particleA.framesRemaining / particleFadeFrames;
+//     stroke(255, opacity);
+//     line(
+//       particleA.position.x,
+//       particleA.position.y,
+//       particleB.position.x,
+//       particleB.position.y
+//     );
+//   }
+
+//   // Display path
+//   display() {
+//     // Loop through backwards so that when a particle is removed,
+//     // the index number for the next loop will match up with the
+//     // particle before the removed one
+//     for (let i = this.particles.length - 1; i >= 0; i -= 1) {
+//       // Remove this particle if it has no frames remaining
+//       if (this.particles[i].framesRemaining <= 0) {
+//         this.particles.splice(i, 1);
+
+//         // Otherwise, display it
+//       } else {
+//         this.particles[i].display();
+
+//         // If there is a particle after this one
+//         if (i < this.particles.length - 1) {
+//           // Connect them with a line
+//           this.connectParticles(this.particles[i], this.particles[i + 1]);
+//         }
+//       }
+//     }
+//   }
+
+
+// // Particle along a path
+// class Particle {
+//   constructor(position, velocity, hue) {
+//     this.position = position.copy();
+//     this.velocity = velocity.copy();
+//     this.hue = hue;
+//     this.drag = 0.95;
+//     this.framesRemaining = particleFadeFrames;
+//   }
+
+//   update() {
+//     // Move it
+//     this.position.add(this.velocity);
+
+//     // this moves the stars down
+//     // this.position.y += 2.5
+//     this.position.x += random(-0.5, 0.5)
+//     this.position.y += random(-0.5, 0.5) 
+
+
+//     // Slow it down
+//     this.velocity.mult(this.drag * 0.5);
+
+//     // this is responsible for fading stars and removing them from the sketch
+//     this.framesRemaining = this.framesRemaining - 1;
+//   }
+
+//   // Draw particle
+//   display() {
+//     // uncomment the next line if you want stars to fade out
+//     // let opacity = this.framesRemaining / particleFadeFrames;
+    
+//     // comment out this line if you want stars to fade out
+//     let opacity = 1; 
+
+//     noStroke();
+//     fill(this.hue, 0, 90, opacity);
+//             let size = random(1, 5);
+//     //twinkle stars 
+//     //thank you rowan/ the surgeon for ur help :3
+
+//     star(this.position.x, this.position.y, size, 10, 5);
+//     // star(x, y, 50, 100, 5);
+//   }
+// let snowflakes = [];
+// let colorChoice
+// let dir = 1;
+
+
+     
+
     
 
-    // When snowflake reaches the bottom, move it to the top
-    if (this.posY > height) {
-      this.posY = -50;
-    }
+// // make an array named colorSet1
+// let colorSet1 = [
+//   [164, 245, 66], [245, 66, 167], [57, 162, 237]
+// ]
+
+// let colorSet2 = [
+//   [255,0,255]
+// ]
+
+// let colorSet3 =[
+//   [100,232,98]
+// ]
+
+// let colorSet4 =[
+//   [20,30,23]
+// ]
+
+// let colorSet5 =[
+//   [1,55,96]
+// ]
+
+// let colorSet6 =[
+//   [44,56,33]
+// ]
+
+// let colorSet7 =[
+//   [200,76,93]
+// ]
+
+// let colorSet8 =[
+//   [44,88,99]
+// ]
+
+// let colorSet9 =[
+//   [110,24,222]
+// ]
+
+// let colorSet10 =[
+//   [22,99,54]
+// ]
+// // let colorSet3 = [ random(20, 256), random(200, 25), random(200, 256) ]
+
+// //reset the cubes
+// function keyPressed() {
+
+//   if (keyCode === LEFT_ARROW) {
+//     if(dir == 1){
+//        dir = -1;
+//     }else{
+//        dir = 1;
+//     }
+//   }
+//   // Uncomment to prevent any default behavior.
+//   // return false;
+// }
+// // make an array to contains the colorsets
+// let colorSets = [colorSet1, colorSet2,colorSet3,colorSet4,colorSet5,colorSet6,colorSet7,colorSet8,colorSet9,colorSet10]
+// // function to wipe the snowflakes and create new ones
+// function makeItSnow(){
+//    let colorNumber = Math.floor(Math.random() * (colorSets.length))
+//    colorChoice = colorSets[colorNumber]
+//    console.log(colorChoice)
+//    // first, clear the snow array
+//   snowflakes.length = 0
+//     // Create snowflake objects
+//   for (let i = 0; i < 300; i++) {
+//     // Add a new snowflake object to the array
+//     snowflakes.push(new Snowflake());
+//   }
+// }
+
+
+
+
+
+
+
+
+//  makeItSnow()
+
+
+
+//   function keyPressed() {
+//   if (keyCode === LEFT_ARROW) {
+//     console.log("Left arrow key was pressed!");
+//     makeItSnow()
+//   } else if (key === 'a' || key === 'A') {
+//     console.log("The 'A' key was pressed!");
+//     makeItSnow()
+//   }
+
+
+  
+
+
+  
+
+
+//   // Update and display each snowflake in the array
+//   let currentTime = frameCount / 60;
+
+//   for (let flake of snowflakes) {
+//     // Update each snowflake position and display
+//     flake.update(currentTime);
+//     flake.display();
+//   }
+// }
+
+// // Define the snowflake class
+
+// class Snowflake {
+//   constructor() {
+//     this.posX = 0;
+//     this.posY = random(-height, 0);
+//     this.initialAngle = random(0, 360);
+//     this.size = random(6, 30);
+//     this.radius = sqrt(random(pow(width / 2, 2)));
+//     this.color = color(colorChoice[0], colorChoice[1], colorChoice[2] );
+//   }
+
+//   update(time) {
+//     // Define angular speed (degrees / second)
+//     let angularSpeed = 25;
+
+//     // Calculate the current angle
+//     let angle = this.initialAngle + angularSpeed * time;
+
+//     // x position follows a sine wave
+//     this.posX = width / 2 + this.radius * sin(angle);
+
+//     // Different size snowflakes fall at different y speeds
+//     let ySpeed = 10 / this.size;
+
+//     this.posY += ySpeed * dir;
+    
+
+//     // When snowflake reaches the bottom, move it to the top
+//     if (this.posY > height) {
+//       this.posY = -50;
+//     }
     
    
-  // }
+//  }
 
-  // display() {
-  //   fill(this.color);
-  //   noStroke();
-  // rect(this.posX, this.posY, this.size);
+//   // display() {
+//   //   fill(this.color);
+//   //   noStroke();
+//   // rect(this.posX, this.posY, this.size);
