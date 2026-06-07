@@ -65,8 +65,8 @@ function keyPressed() {
        dir = 1;
     }
   }
-  // Uncomment to prevent any default behavior.
-  // return false;
+  
+  
 }
 // make an array to contains the colorsets
 let colorSets = [colorSet1, colorSet2,colorSet3,colorSet4,colorSet5,colorSet6,colorSet7,colorSet8,colorSet9,colorSet10]

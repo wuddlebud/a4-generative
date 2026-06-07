@@ -1,14 +1,14 @@
 {
   "sketch1": {
-    "title": "source 1 title",
-    "author": "source 1 author",
-    "date": "source 1 date",
-    "source": "source 1 url"
+    "title": "Connected Particles",
+    "author": "Caleb Fost",
+    "date": "jun 6 2026",
+    "source": "https://p5js.org/examples/classes-and-objects-connected-particles/"
   },
   "sketch2": {
-    "title": "source 2 title",
-    "author": "source 2 author",
-    "date": "source 2 date",
-    "source": "source 2 url"
+    "title": "snowflakes",
+    "author": "Aatish Bhatia",
+    "date": "jun 6 2026",
+    "source": "https://p5js.org/examples/classes-and-objects-snowflakes/"
   }
 }
