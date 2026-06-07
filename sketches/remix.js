@@ -153,17 +153,17 @@ class Path {
       }
     }
   }
-}
 
-// Particle along a path
-class Particle {
-  constructor(position, velocity, hue) {
-    this.position = position.copy();
-    this.velocity = velocity.copy();
-    this.hue = hue;
-    this.drag = 0.95;
-    this.framesRemaining = particleFadeFrames;
-  }
+
+// // Particle along a path
+// class Particle {
+//   constructor(position, velocity, hue) {
+//     this.position = position.copy();
+//     this.velocity = velocity.copy();
+//     this.hue = hue;
+//     this.drag = 0.95;
+//     this.framesRemaining = particleFadeFrames;
+//   }
 
   update() {
     // Move it
@@ -199,8 +199,7 @@ class Particle {
     star(this.position.x, this.position.y, size, 10, 5);
     // star(x, y, 50, 100, 5);
   }
-}
-  let snowflakes = [];
+let snowflakes = [];
 let colorChoice
 let dir = 1;
 
@@ -289,7 +288,7 @@ function makeItSnow(){
 
  makeItSnow()
 
-}
+
 
   function keyPressed() {
   if (keyCode === LEFT_ARROW) {
@@ -298,7 +297,7 @@ function makeItSnow(){
   } else if (key === 'a' || key === 'A') {
     console.log("The 'A' key was pressed!");
     makeItSnow()
-  }}
+  }
 
 
   
@@ -351,9 +350,9 @@ class Snowflake {
     }
     
    
-  }
+  // }
 
-  display() {
-    fill(this.color);
-    noStroke();
-  rect(this.posX, this.posY, this.size);
+  // display() {
+  //   fill(this.color);
+  //   noStroke();
+  // rect(this.posX, this.posY, this.size);
